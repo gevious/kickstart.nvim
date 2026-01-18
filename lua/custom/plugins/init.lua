@@ -23,42 +23,35 @@ return {
     'ThePrimeagen/harpoon',
     branch = 'harpoon2',
     requires = { { 'nvim-lua/plenary.nvim' } },
-    keys = {
-      {
-        '<leader>ha',
-        function()
-          require('harpoon.mark').add_file()
-        end,
-        desc = 'Harpoon Add File',
-      },
-      {
-        '<leader>hh',
-        function()
-          require('harpoon.ui').toggle_quick_menu()
-        end,
-        desc = 'Harpoon Menu',
-      },
-      {
-        '<leader>hf',
-        function()
-          require('harpoon.ui').nav_file(1)
-        end,
-        desc = 'Jump to 1st file',
-      },
-      {
-        '<leader>hd',
-        function()
-          require('harpoon.ui').nav_file(2)
-        end,
-        desc = 'Jump to 2nd file',
-      },
-      {
-        '<leader>hs',
-        function()
-          require('harpoon.ui').nav_file(3)
-        end,
-        desc = 'Jump to 3nd file',
-      },
-    },
+    keys = function()
+      local harpoon_mark = require 'harpoon.mark'
+      local harpoon_ui = require 'harpoon.ui'
+
+      local nav_file = function(n)
+        return function()
+          harpoon_ui.nav_file(n)
+        end
+      end
+
+      return {
+        {
+          '<leader>ha',
+          function()
+            harpoon_mark.add_file()
+          end,
+          desc = 'Harpoon Add File',
+        },
+        {
+          '<leader>hh',
+          function()
+            harpoon_ui.toggle_quick_menu()
+          end,
+          desc = 'Harpoon Menu',
+        },
+        { '<leader>hf', nav_file(1), desc = 'Jump to 1st file' },
+        { '<leader>hd', nav_file(2), desc = 'Jump to 2nd file' },
+        { '<leader>hs', nav_file(3), desc = 'Jump to 3rd file' },
+      }
+    end,
   },
 }
